@@ -27,16 +27,18 @@ def main():
     #             max_rows=100)
 
     # construct mlp object
-    # defalut: lr=learning rate=0.3, momentum=0.5, size=None, epoch=100, load=load weights from npz file=0
+    # lr=learning rate=0.3,
+    # momentum=0.5,
+    # size=None,
+    # epoch=100,
+    # load=load weights from npz file=0
+    # save=save new module structure into npy files
     # 784 inputs, 1 hidden layer with 50 nueros, 10 output.
-    # in this case, we can only can hidden layer of mlp structure
+    # in this case, we can only modify hidden layer of mlp structure
     size = [784, 50, 10]
-    amlp = mlp.mlp(0.5, 0.3, size, 200,0)
+    amlp = mlp.mlp(0.5, 0.3, size, 200,0,1)
     amlp.miniBatch(training_data,50, validation_date)
-    # save weights
-    np.save('weights', amlp.weights)
-    np.save('biases', amlp.biases)
-    np.save('size',size)
+
 
 # handle output lable to 10 nodes
 def YtoOutput(y):

@@ -1,12 +1,14 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 class mlp:
-    def __init__(self, lr=0.3, momentum=0.5, size=None, epoch=100, load=0):
+    def __init__(self, lr=0.3, momentum=0.5, size=None, epoch=100, load=0, save=0):
         self.learningRate = lr  # learning Rate
         self.maxEpoch = epoch   # epoch number
         self.size = size        # network structure
         self.momentum = momentum # moentum
         self.num_layers = len(size) # the num of layers
+        self.save = save        # save new structure ?
         # for a MLP, the weights matrix should reverse the order of num of neuros in each layer
         # the biases weights matrix should be num of neuros in the hidden layer + output layer
         # e.g. for a n*m1*m2*k network, weigths for each layer = m1*n , m2*m1 , k*m2
@@ -35,6 +37,8 @@ class mlp:
     def miniBatch(self, training_data, mini_batch_size,  test_data):
         if test_data:
             n_test = len(test_data)
+        x_epoch = []            # save epoch iternative
+        y_error_ratio = []      # error ratio
         # loop epochs
         for j in range(self.maxEpoch):
             # shuffle the data, this step is nesscary for minibatch
@@ -50,9 +54,20 @@ class mlp:
                 self.update_mini_batch(mini_batch)
             # evaluate
             if test_data:
-                print("Epoch {0}: {1} / {2}".format(j, self.evaluate(test_data), n_test))
+                evaluate = self.evaluate(test_data)
+                x_epoch.append(j)
+                y_error_ratio.append(1-evaluate/n_test)
+                print("Epoch {0}: {1} / {2}".format(j, evaluate, n_test))
             else:
                 print("Epoch {0} complete".format(j))
+        # draw plot for epoch ~ error ratio
+        plt.plot(x_epoch, y_error_ratio)
+        plt.show()
+        # save structure
+        if self.save == 1:
+            np.save('weights', self.weights)
+            np.save('biases', self.biases)
+            np.save('size', self.size)
 
     # update mini batch
     def update_mini_batch(self, mini_batch):
@@ -112,6 +127,11 @@ class mlp:
         test_results = [(np.argmax(self.forward(x)),np.argmax(y)) for (x,y) in test_data]
         return sum(int(x==y) for (x,y) in test_results)
 
+    # predict the given data
+    def perdict(self,test_data):
+        test_results = [np.argmax(self.forward(x)) for x in test_data]
+        return test_results
+
     def cost_derivative(self, output_activations, y):
         return (output_activations - y)
 
@@ -119,7 +139,7 @@ class mlp:
     def sigmode(self,x):
         return 1.0/(1.0 + np.exp(-x))
 
-    #define softmax as activate function
+    # define softmax as activate function
     def softmax(self,inputs):
         return np.exp(inputs)/float(sum(np.exp(inputs)))
 
