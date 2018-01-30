@@ -7,7 +7,10 @@ class mlp:
         self.maxEpoch = epoch   # epoch number
         self.size = size        # network structure
         self.momentum = momentum # moentum
-        self.num_layers = len(size) # the num of layers
+        if size:
+            self.num_layers = len(size) # the num of layers
+        else:
+            self.num_layers = 0
         self.save = save        # save new structure ?
         # for a MLP, the weights matrix should reverse the order of num of neuros in each layer
         # the biases weights matrix should be num of neuros in the hidden layer + output layer
@@ -129,7 +132,7 @@ class mlp:
 
     # predict the given data
     def perdict(self,test_data):
-        test_results = [np.argmax(self.forward(x)) for x in test_data]
+        test_results = [int(np.argmax(self.forward(x))) for x in test_data]
         return test_results
 
     def cost_derivative(self, output_activations, y):
