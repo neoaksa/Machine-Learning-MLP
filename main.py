@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 def main():
-    # training()
+    #training()
     testing()
 
 def testing():
