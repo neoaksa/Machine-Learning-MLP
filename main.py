@@ -1,11 +1,13 @@
 import mlp
 from numpy import genfromtxt
+import matplotlib.pyplot as plt
 import numpy as np
 import os
 
 def main():
+    whitecells()
     #training()
-    testing()
+    #testing()
 
 def testing():
     # load data from csv
@@ -81,6 +83,20 @@ def YtoOutput(y):
 # data normalization inputs
 def normalizationX(x):
     return x / 255
+
+# analysis white cells
+def whitecells():
+    # load data from csv
+    # load data from csv
+    currentpath = os.getcwd()
+    training_file = genfromtxt(currentpath + '/data/train.csv',
+                               delimiter=',',
+                               skip_header=1,
+                               max_rows=4000)
+    meanarray = np.mean(training_file[:,1:],axis=0)
+    meanarray = meanarray.reshape(28,28)
+    plt.imshow(meanarray, cmap='hot', interpolation='nearest')
+    plt.show()
 
 if __name__ == '__main__':
     main()
