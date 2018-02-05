@@ -1,8 +1,12 @@
 import mlp
 from numpy import genfromtxt
-import matplotlib.pyplot as plt
 import numpy as np
 import os
+import time
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sn
+import pandas as pd
 
 def main():
     whitecells()
@@ -34,8 +38,17 @@ def testing():
     amlp = mlp.mlp(None, None, None, None, 1, 0)
     np.savetxt('test_result.csv', amlp.perdict(testing_input), delimiter=',')
     evaluate = amlp.evaluate(testing_data)
+    print(amlp.perdict(testing_input))
+    print(testing_label)
+    type(testing_input)
     print("Correct in Test: {0} % ".format(evaluate/len(testing_label)*100))
-
+    pred = amlp.perdict(testing_input)
+    cmat = confusion_matrix(testing_label, pred)
+    print(cmat)
+    df_cm = pd.DataFrame(cmat, range(10), range(10))
+    sn.set(font_scale=1.4)
+    sn.heatmap(df_cm,annot=True,annot_kws={"size": 12},fmt='g',cmap='Blues',vmax=25)
+    plt.show()
 
 # training code
 def training():
@@ -63,7 +76,7 @@ def training():
 
     # construct mlp object
     # lr=learning rate=0.3,
-    # momentum=0.5,
+    # momentum=0.5,                     
     # size=None,
     # epoch=100,
     # load=load weights from npz file=0
@@ -71,7 +84,7 @@ def training():
     # 784 inputs, 1 hidden layer with 50 nueros, 10 output.
     # in this case, we can only modify hidden layer of mlp structure
     size = [784, 50, 10]
-    amlp = mlp.mlp(0.5, 0.3, size, 200, 0, 1)
+    amlp = mlp.mlp(0.9, 0.3, size, 200, 0, 1)
     amlp.miniBatch(training_data, 50, validation_date)
 
 # handle output lable to 10 nodes
@@ -84,19 +97,19 @@ def YtoOutput(y):
 def normalizationX(x):
     return x / 255
 
-# analysis white cells
 def whitecells():
-    # load data from csv
     # load data from csv
     currentpath = os.getcwd()
     training_file = genfromtxt(currentpath + '/data/train.csv',
                                delimiter=',',
                                skip_header=1,
-                               max_rows=4000)
-    meanarray = np.mean(training_file[:,1:],axis=0)
+                               max_rows=40000)
+    meanarray = np.mean(training_file1[:,1:],axis=0)
     meanarray = meanarray.reshape(28,28)
     plt.imshow(meanarray, cmap='hot', interpolation='nearest')
     plt.show()
 
 if __name__ == '__main__':
+    start_time = time.time()
     main()
+    print("--- %s seconds ---" % (time.time() - start_time))
