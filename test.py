@@ -35,12 +35,16 @@ training_input = normalizationX(training_file[0::2, 1:])  # normalization data
 # print(a)
 
 t = np.arange(0,784).reshape(28,28)
-#print(t)
-t=t[4:23, 4:23 ]
-print(t[1])
-#print(t.flatten())
-n = training_input[:, t.flatten()]
-print(n[1])
+print(t)
+t=t[4:24, 4:24]
+print(len(t[1]))
+
+
+p = np.arange(0,10)
+print(p[0:5])
+# #print(t.flatten())
+# n = training_input[:, t.flatten()]
+# print(n[1])
 
 
 

@@ -11,7 +11,7 @@ import pandas as pd
 def main():
      # whitecells()
      # training()
-     testing()
+      testing()
 
 def testing():
     # load data from csv
@@ -115,7 +115,7 @@ def whitecells():
 # according to whitecells(), cut whitespace
 def cutwhitespace(input):
     ref = np.arange(0, 784).reshape(28, 28)
-    ref = ref[4:23, 4:23]
+    ref = ref[4:24, 4:24]
     input = input[:,ref.flatten()]
     return input
 
