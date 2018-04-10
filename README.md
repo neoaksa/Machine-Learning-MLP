@@ -10,7 +10,7 @@ Author:Jie Tao, Joel Smith
 
 **       ** The data normalization was achieved by simply dividing each value by 255. We created a heatmap of the mean value of each column of the raw data CSV file so we could determine which cells we could remove in order to decrease inputs and extraneous data. The heatmap, shown in Figure 1, reveals that there are about four rows above and below, and four columns to the left and to the right of most of the important data.
 
-        ![](image/figure1.png)
+![](image/figure1.png)
 
 Figure 1. Heatmap of the mean values of all 40,000 training samples.
 
